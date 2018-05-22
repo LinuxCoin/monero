@@ -26,10 +26,10 @@ ARG BOOST_VERSION_DOT=1.66.0
 ARG BOOST_HASH=5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9
 RUN curl -s -L -o  boost_${BOOST_VERSION}.tar.bz2 https://dl.bintray.com/boostorg/release/${BOOST_VERSION_DOT}/source/boost_${BOOST_VERSION}.tar.bz2 \
     && echo "${BOOST_HASH} boost_${BOOST_VERSION}.tar.bz2" | sha256sum -c \
-    && tar -xvf boost_${BOOST_VERSION}.tar.bz2 \
+    && tar -xvf boost_${BOOST_VERSION}.tar.bz2 >> tarxvf.log \
     && cd boost_${BOOST_VERSION} \
-    && ./bootstrap.sh \
-    && ./b2 --build-type=minimal link=static runtime-link=static --with-chrono --with-date_time --with-filesystem --with-program_options --with-regex --with-serialization --with-system --with-thread --with-locale threading=multi threadapi=pthread cflags="-fPIC" cxxflags="-fPIC" stage
+    && ./bootstrap.sh >> bootstrap.sh.log \
+    && ./b2 --build-type=minimal link=static runtime-link=static --with-chrono --with-date_time --with-filesystem --with-program_options --with-regex --with-serialization --with-system --with-thread --with-locale threading=multi threadapi=pthread cflags="-fPIC" cxxflags="-fPIC" stage >> b2.log
 ENV BOOST_ROOT /usr/local/boost_${BOOST_VERSION}
 
 # OpenSSL
@@ -40,8 +40,8 @@ RUN curl -s -O https://www.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz 
     && tar -xzf openssl-${OPENSSL_VERSION}.tar.gz \
     && cd openssl-${OPENSSL_VERSION} \
     && ./Configure linux-x86_64 no-shared --static -fPIC \
-    && make build_crypto build_ssl \
-    && make install
+    && make --quiet build_crypto build_ssl \
+    && make --quiet install
 ENV OPENSSL_ROOT_DIR=/usr/local/openssl-${OPENSSL_VERSION}
 
 # ZMQ
@@ -52,8 +52,8 @@ RUN git clone https://github.com/zeromq/libzmq.git -b ${ZMQ_VERSION} \
     && test `git rev-parse HEAD` = ${ZMQ_HASH} || exit 1 \
     && ./autogen.sh \
     && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure --enable-static --disable-shared \
-    && make \
-    && make install \
+    && make --quiet \
+    && make --quiet install \
     && ldconfig
 
 # zmq.hpp
@@ -71,8 +71,8 @@ RUN curl -s -O https://ftp.gnu.org/gnu/readline/readline-${READLINE_VERSION}.tar
     && tar -xzf readline-${READLINE_VERSION}.tar.gz \
     && cd readline-${READLINE_VERSION} \
     && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure \
-    && make \
-    && make install
+    && make --quiet \
+    && make --quiet install
 
 # Sodium
 ARG SODIUM_VERSION=1.0.16
@@ -82,9 +82,9 @@ RUN git clone https://github.com/jedisct1/libsodium.git -b ${SODIUM_VERSION} \
     && test `git rev-parse HEAD` = ${SODIUM_HASH} || exit 1 \
     && ./autogen.sh \
     && CFLAGS="-fPIC" CXXFLAGS="-fPIC" ./configure \
-    && make \
-    && make check \
-    && make install
+    && make --quiet \
+    && make --quiet check \
+    && make --quiet install
 
 WORKDIR /src
 COPY . .
