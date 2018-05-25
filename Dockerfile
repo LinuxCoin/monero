@@ -1,6 +1,11 @@
 # runtime stage
 FROM itmanagerro/monbuild
 
+ARG BOOST_VERSION=1_66_0
+ENV BOOST_ROOT /usr/local/boost_${BOOST_VERSION}
+ARG OPENSSL_VERSION=1.0.2n
+ENV OPENSSL_ROOT_DIR=/usr/local/openssl-${OPENSSL_VERSION}
+
 WORKDIR /src
 COPY . .
 
