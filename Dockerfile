@@ -1,5 +1,5 @@
 # runtime stage
-FROM itmanagerro:monbuild
+FROM itmanagerro/monbuild
 
 WORKDIR /src
 COPY . .
