@@ -1,5 +1,5 @@
 # runtime stage
-FROM ubuntu:16.04
+FROM itmanagerro:monbuild
 
 WORKDIR /src
 COPY . .
