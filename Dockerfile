@@ -18,7 +18,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt
 
-COPY --from=builder /src/build/release/bin/* /usr/local/bin/
+COPY /src/build/release/bin/* /usr/local/bin/
 
 # Contains the blockchain
 VOLUME /root/.bitmonero
