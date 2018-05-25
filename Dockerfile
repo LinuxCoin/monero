@@ -9,7 +9,7 @@ ENV OPENSSL_ROOT_DIR=/usr/local/openssl-${OPENSSL_VERSION}
 WORKDIR /src
 COPY . .
 
-ARG NPROC=6
+ARG NPROC
 RUN rm -rf build && \
     if [ -z "$NPROC" ];then make VERBOSE=1 -j$(nproc) release-static;else make VERBOSE=1 -j$NPROC release-static;fi
 
