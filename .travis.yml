@@ -7,8 +7,8 @@ services:
 
 before_install:
   - docker build -t linuxchain:monero .
-  - docker run -d -p 127.0.0.1:80:4567 linuxchain:monero /bin/sh -c "ls -la /wallet"
+  - docker run linuxchain:monero
   - docker ps -a
 
 script:
-  - ps auxwww
+  - docker exec -t 
