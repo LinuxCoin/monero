@@ -9,9 +9,9 @@ ENV OPENSSL_ROOT_DIR=/usr/local/openssl-${OPENSSL_VERSION}
 WORKDIR /src
 COPY . .
 
-ARG NPROC
+ARG NPROC=6
 RUN rm -rf build && \
-    if [ -z "$NPROC" ];then make -j$(nproc) release-static;else make -j$NPROC release-static;fi
+    if [ -z "$NPROC" ];then make VERBOSE=1 -j$(nproc) release-static;else make VERBOSE=1 -j$NPROC release-static;fi
 
 RUN apt-get update && \
     apt-get --no-install-recommends --yes install ca-certificates && \
