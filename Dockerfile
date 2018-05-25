@@ -9,7 +9,7 @@ ENV OPENSSL_ROOT_DIR=/usr/local/openssl-${OPENSSL_VERSION}
 WORKDIR /src
 COPY . .
 
-ARG NPROC
+ARG NPROC=4
 RUN rm -rf build && \
     if [ -z "$NPROC" ];then make VERBOSE=1 -j$(nproc) release-static;else make VERBOSE=1 -j$NPROC release-static;fi
 
@@ -18,7 +18,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt
 
-COPY /src/build/release/bin/* /usr/local/bin/
+RUN cp -a /src/build/release/bin/* /usr/local/bin/
 
 # Contains the blockchain
 VOLUME /root/.bitmonero
